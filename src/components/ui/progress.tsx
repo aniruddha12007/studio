@@ -18,7 +18,13 @@ const Progress = React.forwardRef<
     {...props}
   >
     <ProgressPrimitive.Indicator
-      className="h-full w-full flex-1 bg-primary transition-all"
+      className={cn(
+        "h-full w-full flex-1 bg-primary transition-all",
+        // Allow custom colors via className, e.g., "bg-accent" or "bg-destructive"
+        // Check for specific class names to override default bg-primary
+        className?.includes("accent") && "bg-accent",
+        className?.includes("destructive") && "bg-destructive"
+      )}
       style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
     />
   </ProgressPrimitive.Root>
