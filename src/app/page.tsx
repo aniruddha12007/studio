@@ -36,7 +36,26 @@ export default function DashboardPage() {
     setMounted(true);
     // Here you would typically fetch transactions and categories
     // For now, we use initial data.
-  }, []);
+    if (mounted) {
+      try {
+        const storedTransactions = localStorage.getItem('transactions');
+        if (storedTransactions) {
+          const parsedTransactions = JSON.parse(storedTransactions);
+          if (Array.isArray(parsedTransactions)) {
+            // Basic type validation for each transaction can be added here if necessary
+            setTransactions(parsedTransactions);
+          } else {
+            console.error('Stored transactions are not an array, using initial transactions.');
+            // transactions state already defaults to initialTransactions
+          }
+        }
+        // If storedTransactions is null, transactions state already defaults to initialTransactions
+      } catch (error) {
+        console.error('Failed to parse transactions from localStorage, using initial transactions:', error);
+        // transactions state already defaults to initialTransactions
+      }
+    }
+  }, [mounted]); // Add mounted to dependency array
 
   const summary = useMemo(() => {
     const totalIncome = transactions
