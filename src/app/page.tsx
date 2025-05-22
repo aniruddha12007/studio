@@ -1,14 +1,15 @@
+
 "use client";
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { BarChart, DollarSign, TrendingUp, TrendingDown, ListChecks, PlusCircle, Sparkles } from 'lucide-react';
+import { DollarSign, TrendingUp, TrendingDown, ListChecks, PlusCircle, Sparkles } from 'lucide-react'; // Removed BarChart from here
 import Link from 'next/link';
 import { defaultCategories, type Category, type Transaction } from '@/types';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
-import { Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend as RechartsLegend, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend as RechartsLegend, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell } from 'recharts'; // Added BarChart here
 import Image from 'next/image';
 
 interface ChartData {
@@ -247,3 +248,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+    
