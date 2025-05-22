@@ -5,7 +5,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import type { Category } from '@/types';
-import { defaultCategories } from '@/types'; // For icon choices
+// import { defaultCategories } from '@/types'; // For icon choices - This seems unused here
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -33,7 +33,7 @@ const lucideIconNames = Object.keys(LucideIcons).filter(
 
 
 export function CategoryManager({ onSave, onCancel, initialData }: CategoryManagerProps) {
-  const { control, handleSubmit, register, formState: { errors }, reset, setValue } = useForm<CategoryFormData>({
+  const { control, handleSubmit, register, formState: { errors }, reset, setValue, watch } = useForm<CategoryFormData>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
       name: initialData?.name || '',
@@ -51,18 +51,21 @@ export function CategoryManager({ onSave, onCancel, initialData }: CategoryManag
   }, [initialData, setValue]);
 
   const processSubmit = (data: CategoryFormData) => {
-    const iconComponent = (LucideIcons as any)[data.icon] || LucideIcons.Shapes;
+    const iconComponentOrName = data.icon; // Keep as string for data, component for rendering if needed
     onSave({
       id: initialData?.id || '', // ID will be set by parent if new
       ...data,
-      icon: iconComponent, // Store the component for rendering
+      icon: iconComponentOrName, // Store the icon name string
     });
     reset();
   };
   
-  // Dynamically get icon component for preview
-  const SelectedIcon = (LucideIcons as any)[watch('icon') || 'Shapes'] || LucideIcons.Shapes;
-  const { watch } = useForm(); // To watch icon changes
+  // Dynamically get icon component for preview - 'watch' is now available from the useForm hook call above.
+  // Note: This 'SelectedIcon' variable is declared but doesn't seem to be used in the JSX below.
+  // The preview icon is rendered directly using `field.value` in the Controller.
+  // If it's truly unused, it could be removed, but fixing the 'watch' initialization is the priority.
+  const SelectedIcon = (LucideIcons as any)[watch('icon') || 'Shapes'] || LucideIcons.Shapes; 
+  // Removed the problematic line: const { watch } = useForm(); 
 
   return (
     <form onSubmit={handleSubmit(processSubmit)} className="space-y-4 py-4">
