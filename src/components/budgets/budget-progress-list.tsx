@@ -63,7 +63,7 @@ export function BudgetProgressList({ categories, transactions, onEditCategory, o
                 </div>
                 <Progress value={cat.progress} className={cat.progress > 85 && cat.remaining >= 0 ? "accent" : cat.remaining < 0 ? "destructive" : ""} />
                 {cat.progress > 85 && cat.remaining >=0 && cat.progress < 100 && (
-                    <div className="flex items-center text-xs text-orange-500 mt-1">
+                    <div className="flex items-center text-xs text-primary mt-1"> {/* Changed text-orange-500 to text-primary */}
                         <AlertTriangle className="h-3 w-3 mr-1" />
                         Nearing budget limit.
                     </div>

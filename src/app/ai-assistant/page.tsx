@@ -146,7 +146,7 @@ export default function AIAssistantPage() {
                 <AlertDescription>
                   <p className="mb-1">
                     Suggested Adjustment: 
-                    <span className={`font-medium ${suggestion.suggestedAdjustment > 0 ? 'text-green-600' : suggestion.suggestedAdjustment < 0 ? 'text-red-600' : ''}`}>
+                    <span className={`font-medium ${suggestion.suggestedAdjustment > 0 ? 'text-accent' : suggestion.suggestedAdjustment < 0 ? 'text-destructive' : ''}`}>
                       {suggestion.suggestedAdjustment > 0 ? '+' : ''}${suggestion.suggestedAdjustment.toFixed(2)}
                     </span>
                   </p>

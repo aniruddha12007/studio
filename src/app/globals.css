@@ -8,43 +8,44 @@ body {
 
 @layer base {
   :root {
-    --background: 220 100% 96%; /* #EAF2FF */
-    --foreground: 222 47% 11%; /* #0F172A */
-    --card: 220 100% 98%; /* Slightly lighter blue/off-white for cards */
-    --card-foreground: 222 47% 11%;
-    --popover: 220 100% 98%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 210 98% 73%; /* #77B5FE */
-    --primary-foreground: 0 0% 100%; /* White */
-    --secondary: 220 60% 90%;
-    --secondary-foreground: 222 47% 15%;
-    --muted: 220 50% 85%;
-    --muted-foreground: 222 30% 40%;
-    --accent: 147 50% 35%; /* Darker Green for better contrast on light backgrounds, e.g., #2E8863 */
-    --accent-foreground: 0 0% 100%; /* White */
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 220 40% 88%;
-    --input: 220 100% 99%; /* Very light blue for inputs, almost white */
-    --ring: 210 98% 65%;
-    --chart-1: 210 98% 73%; /* Primary */
-    --chart-2: 147 50% 35%; /* Accent (updated to darker green) */
-    --chart-3: 25 80% 60%; /* Warm color for contrast */
-    --chart-4: 260 70% 75%; /* Purpleish for contrast */
-    --chart-5: 300 70% 70%; /* Pinkish for contrast */
+    --background: 220 15% 10%; /* Very Dark Blue/Grey */
+    --foreground: 220 15% 95%; /* Light Grey/Off-white */
+    --card: 220 15% 15%; /* Slightly lighter than background */
+    --card-foreground: 220 15% 95%;
+    --popover: 220 15% 15%;
+    --popover-foreground: 220 15% 95%;
+    --primary: 200 90% 60%; /* Vibrant Cyan-Blue */
+    --primary-foreground: 220 15% 10%; /* Dark text on primary */
+    --secondary: 220 15% 25%; /* Lighter Grey */
+    --secondary-foreground: 220 15% 95%;
+    --muted: 220 15% 30%; /* Even Lighter Grey */
+    --muted-foreground: 220 15% 70%; /* Mid-light grey text */
+    --accent: 150 70% 55%; /* Vibrant Teal/Green */
+    --accent-foreground: 220 15% 10%; /* Dark text on accent */
+    --destructive: 0 70% 55%; /* Strong Red */
+    --destructive-foreground: 0 0% 100%; /* White text on destructive */
+    --border: 220 15% 20%; /* Subtle Border */
+    --input: 220 15% 18%; /* Input Background */
+    --ring: 200 90% 60%; /* Primary color for rings */
+    --chart-1: 200 90% 60%;
+    --chart-2: 150 70% 55%;
+    --chart-3: 30 90% 60%;
+    --chart-4: 270 80% 70%;
+    --chart-5: 0 80% 70%;
     --radius: 0.5rem;
 
-    --sidebar-background: 220 80% 94%;
-    --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 210 98% 73%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 98% 80%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 220 40% 85%;
-    --sidebar-ring: 210 98% 65%;
+    --sidebar-background: 220 15% 8%; /* Even darker */
+    --sidebar-foreground: 220 15% 90%;
+    --sidebar-primary: 200 90% 60%;
+    --sidebar-primary-foreground: 220 15% 10%;
+    --sidebar-accent: 200 90% 70%; /* Lighter variant of primary for hover/active */
+    --sidebar-accent-foreground: 220 15% 10%;
+    --sidebar-border: 220 15% 15%;
+    --sidebar-ring: 200 90% 60%;
   }
 
   .dark {
+    /* Keeping original dark theme as an alternative, if toggled via 'dark' class */
     --background: 222 47% 11%; /* Dark blue */
     --foreground: 220 100% 96%; /* Light blue */
     --card: 222 47% 15%; /* Darker card */
@@ -65,7 +66,7 @@ body {
     --input: 222 47% 18%;
     --ring: 210 98% 80%;
     --chart-1: 210 98% 73%;
-    --chart-2: 147 59% 71%; /* Accent (original light green for dark mode charts) */
+    --chart-2: 147 59% 71%;
     --chart-3: 25 80% 70%;
     --chart-4: 260 70% 80%;
     --chart-5: 300 70% 75%;
