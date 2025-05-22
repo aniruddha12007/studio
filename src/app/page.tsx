@@ -5,11 +5,11 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { DollarSign, TrendingUp, TrendingDown, ListChecks, PlusCircle, Sparkles } from 'lucide-react'; // Removed BarChart from here
+import { DollarSign, TrendingUp, TrendingDown, ListChecks, PlusCircle, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { defaultCategories, type Category, type Transaction } from '@/types';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend as RechartsLegend, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell } from 'recharts'; // Added BarChart here
+import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend as RechartsLegend, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell } from 'recharts';
 import Image from 'next/image';
 
 interface ChartData {
@@ -147,7 +147,7 @@ export default function DashboardPage() {
             <DollarSign className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${summary.netBalance >= 0 ? 'text-accent-foreground' : 'text-destructive'}`}>
+            <div className={`text-2xl font-bold ${summary.netBalance >= 0 ? 'text-accent' : 'text-destructive'}`}>
               ${summary.netBalance.toFixed(2)}
             </div>
             <p className="text-xs text-muted-foreground">Current balance</p>
@@ -179,7 +179,7 @@ export default function DashboardPage() {
             {spendingByCategoryChartData.length > 0 ? (
               <ChartContainer config={chartConfig} className="h-[300px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={spendingByCategoryChartData} layout="vertical" margin={{ right: 30 }}>
+                  <RechartsBarChart data={spendingByCategoryChartData} layout="vertical" margin={{ right: 30 }}>
                     <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                     <XAxis type="number"  />
                     <YAxis dataKey="name" type="category" tickLine={false} axisLine={false} stroke="hsl(var(--muted-foreground))" fontSize={12} width={80} />
@@ -188,7 +188,7 @@ export default function DashboardPage() {
                       content={<ChartTooltipContent hideLabel />}
                     />
                     <Bar dataKey="total" radius={4} />
-                  </BarChart>
+                  </RechartsBarChart>
                 </ResponsiveContainer>
               </ChartContainer>
             ) : (

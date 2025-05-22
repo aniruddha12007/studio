@@ -20,7 +20,7 @@ body {
     --secondary-foreground: 222 47% 15%;
     --muted: 220 50% 85%;
     --muted-foreground: 222 30% 40%;
-    --accent: 147 59% 71%; /* #89E0AC */
+    --accent: 147 50% 35%; /* Darker Green for better contrast on light backgrounds, e.g., #2E8863 */
     --accent-foreground: 0 0% 100%; /* White */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -28,7 +28,7 @@ body {
     --input: 220 100% 99%; /* Very light blue for inputs, almost white */
     --ring: 210 98% 65%;
     --chart-1: 210 98% 73%; /* Primary */
-    --chart-2: 147 59% 71%; /* Accent */
+    --chart-2: 147 50% 35%; /* Accent (updated to darker green) */
     --chart-3: 25 80% 60%; /* Warm color for contrast */
     --chart-4: 260 70% 75%; /* Purpleish for contrast */
     --chart-5: 300 70% 70%; /* Pinkish for contrast */
@@ -57,7 +57,7 @@ body {
     --secondary-foreground: 220 100% 96%;
     --muted: 222 47% 20%;
     --muted-foreground: 220 80% 80%;
-    --accent: 147 59% 71%; /* #89E0AC */
+    --accent: 147 59% 71%; /* #89E0AC (original light green for dark mode) */
     --accent-foreground: 222 47% 11%; /* Dark text on accent for dark mode */
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
@@ -65,7 +65,7 @@ body {
     --input: 222 47% 18%;
     --ring: 210 98% 80%;
     --chart-1: 210 98% 73%;
-    --chart-2: 147 59% 71%;
+    --chart-2: 147 59% 71%; /* Accent (original light green for dark mode charts) */
     --chart-3: 25 80% 70%;
     --chart-4: 260 70% 80%;
     --chart-5: 300 70% 75%;

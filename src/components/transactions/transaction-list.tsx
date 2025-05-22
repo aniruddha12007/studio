@@ -57,7 +57,7 @@ export function TransactionList({ transactions, categories, onEditTransaction, o
                 </Badge>
               </TableCell>
               <TableCell>{getCategoryName(transaction.categoryId)}</TableCell>
-              <TableCell className={`font-medium ${transaction.type === 'income' ? 'text-accent-foreground' : 'text-destructive'}`}>
+              <TableCell className={`font-medium ${transaction.type === 'income' ? 'text-accent' : 'text-destructive'}`}>
                 {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
               </TableCell>
               <TableCell className="max-w-[150px] truncate">{transaction.description || '-'}</TableCell>
