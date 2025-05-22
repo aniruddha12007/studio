@@ -8,15 +8,12 @@ import { Progress } from '@/components/ui/progress';
 import { DollarSign, TrendingUp, TrendingDown, ListChecks, PlusCircle, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { defaultCategories, type Category, type Transaction } from '@/types';
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
-import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend as RechartsLegend, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell } from 'recharts';
+import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
+import { Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart as RechartsBarChart, Tooltip as RechartsTooltip } from 'recharts';
 import Image from 'next/image';
-
-interface ChartData {
-  name: string;
-  total: number;
-  fill?: string;
-}
+import { useAuth } from '@/contexts/auth-context'; // Reverted to alias
+import { useRouter } from 'next/navigation';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const initialTransactions: Transaction[] = [
   { id: '1', type: 'income', categoryId: 'salary', amount: 3000, date: new Date(2024, 5, 1), description: 'Monthly Salary' },
@@ -27,35 +24,63 @@ const initialTransactions: Transaction[] = [
   { id: '6', type: 'expense', categoryId: 'food', amount: 40, date: new Date(2024, 5, 18), description: 'Lunch Out' },
 ];
 
+interface ChartData {
+  name: string;
+  total: number;
+  fill?: string;
+}
+
 export default function DashboardPage() {
   const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
   const [categories, setCategories] = useState<Category[]>(defaultCategories);
   const [mounted, setMounted] = useState(false);
 
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
   useEffect(() => {
     setMounted(true);
-    // Here you would typically fetch transactions and categories
-    // For now, we use initial data.
-    if (mounted) {
+  }, []);
+
+  useEffect(() => {
+    if (!loading && !user && mounted) {
+      router.push('/login');
+    }
+    if (mounted && user) {
       try {
-        const storedTransactions = localStorage.getItem('transactions');
+        const storedTransactions = localStorage.getItem(`transactions_${user.uid}`);
         if (storedTransactions) {
-          const parsedTransactions = JSON.parse(storedTransactions);
+          const parsedTransactions: Transaction[] = JSON.parse(storedTransactions).map((t: any) => ({...t, date: new Date(t.date)}));
           if (Array.isArray(parsedTransactions)) {
-            // Basic type validation for each transaction can be added here if necessary
             setTransactions(parsedTransactions);
           } else {
             console.error('Stored transactions are not an array, using initial transactions.');
-            // transactions state already defaults to initialTransactions
+            setTransactions(initialTransactions); // Fallback
           }
+        } else {
+           setTransactions(initialTransactions); 
         }
-        // If storedTransactions is null, transactions state already defaults to initialTransactions
+
+        const storedCategories = localStorage.getItem(`categories_${user.uid}`);
+        if (storedCategories) {
+          const parsedCategories: Category[] = JSON.parse(storedCategories);
+           if (Array.isArray(parsedCategories) && parsedCategories.every(cat => cat.id && cat.name && typeof cat.budget === 'number')) {
+            setCategories(parsedCategories);
+          } else {
+            setCategories(defaultCategories); 
+            localStorage.setItem(`categories_${user.uid}`, JSON.stringify(defaultCategories));
+          }
+        } else {
+          setCategories(defaultCategories); 
+          localStorage.setItem(`categories_${user.uid}`, JSON.stringify(defaultCategories));
+        }
       } catch (error) {
-        console.error('Failed to parse transactions from localStorage, using initial transactions:', error);
-        // transactions state already defaults to initialTransactions
+        console.error('Failed to parse data from localStorage, using defaults:', error);
+        setTransactions(initialTransactions);
+        setCategories(defaultCategories);
       }
     }
-  }, [mounted]); // Add mounted to dependency array
+  }, [mounted, user, loading, router]);
 
   const summary = useMemo(() => {
     const totalIncome = transactions
@@ -111,28 +136,40 @@ export default function DashboardPage() {
   }, [spendingByCategoryChartData]);
 
 
-  if (!mounted) {
-    // Render a loading state or null to avoid hydration mismatch
+  if (loading || !mounted || !user) {
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 animate-pulse">
-        {[...Array(4)].map((_, i) => (
-          <Card key={i} className="h-36">
-            <CardHeader><div className="h-6 bg-muted rounded w-3/4"></div></CardHeader>
-            <CardContent><div className="h-8 bg-muted rounded w-1/2"></div></CardContent>
-          </Card>
-        ))}
-        <Card className="lg:col-span-2 h-80">
-           <CardHeader><div className="h-6 bg-muted rounded w-1/4"></div></CardHeader>
-           <CardContent className="flex justify-center items-center h-full">
-             <div className="w-full h-5/6 bg-muted rounded"></div>
-           </CardContent>
-        </Card>
-         <Card className="lg:col-span-2 h-80">
-           <CardHeader><div className="h-6 bg-muted rounded w-1/4"></div></CardHeader>
-           <CardContent className="flex justify-center items-center h-full">
-             <div className="w-full h-5/6 bg-muted rounded"></div>
-           </CardContent>
-        </Card>
+      <div className="space-y-6">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <Card key={i} className="h-36">
+              <CardHeader><Skeleton className="h-6 w-3/4 mb-2" /></CardHeader>
+              <CardContent><Skeleton className="h-8 w-1/2" /></CardContent>
+            </Card>
+          ))}
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+            <Card className="lg:col-span-4 h-80">
+            <CardHeader><Skeleton className="h-6 w-1/4 mb-2" /></CardHeader>
+            <CardContent className="flex justify-center items-center h-[calc(100%-4rem)]">
+                <Skeleton className="w-full h-5/6" />
+            </CardContent>
+            </Card>
+            <Card className="lg:col-span-3 h-80">
+            <CardHeader><Skeleton className="h-6 w-1/4 mb-2" /></CardHeader>
+            <CardContent className="space-y-4 pt-2 h-[calc(100%-4rem)]">
+                {[...Array(3)].map((_, i) => (
+                <div key={i} className="space-y-1">
+                    <div className="flex justify-between">
+                    <Skeleton className="h-4 w-1/3" />
+                    <Skeleton className="h-4 w-1/4" />
+                    </div>
+                    <Skeleton className="h-4 w-full bg-muted-foreground/30" />
+                </div>
+                ))}
+                <Skeleton className="h-10 w-full mt-4" />
+            </CardContent>
+            </Card>
+        </div>
       </div>
     );
   }
@@ -198,15 +235,19 @@ export default function DashboardPage() {
             {spendingByCategoryChartData.length > 0 ? (
               <ChartContainer config={chartConfig} className="h-[300px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <RechartsBarChart data={spendingByCategoryChartData} layout="vertical" margin={{ right: 30 }}>
+                  <RechartsBarChart data={spendingByCategoryChartData} layout="vertical" margin={{ right: 30, left: 20 }}>
                     <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                    <XAxis type="number"  />
-                    <YAxis dataKey="name" type="category" tickLine={false} axisLine={false} stroke="hsl(var(--muted-foreground))" fontSize={12} width={80} />
+                    <XAxis type="number" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                    <YAxis dataKey="name" type="category" tickLine={false} axisLine={false} stroke="hsl(var(--muted-foreground))" fontSize={12} width={100} interval={0} />
                     <RechartsTooltip 
                       cursor={{ fill: "hsl(var(--muted))" }}
                       content={<ChartTooltipContent hideLabel />}
                     />
-                    <Bar dataKey="total" radius={4} />
+                    <Bar dataKey="total" radius={4}>
+                      {/* {spendingByCategoryChartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                      ))} */}
+                    </Bar>
                   </RechartsBarChart>
                 </ResponsiveContainer>
               </ChartContainer>
@@ -236,7 +277,9 @@ export default function DashboardPage() {
                         ${budget.spent.toFixed(2)} / ${budget.budget.toFixed(2)}
                       </span>
                     </div>
-                    <Progress value={budget.progress} aria-label={`${budget.name} budget progress`} />
+                    <Progress value={budget.progress} aria-label={`${budget.name} budget progress`} 
+                              className={budget.progress > 85 && budget.remaining >=0 ? "accent" : budget.remaining < 0 ? "destructive" : ""}
+                    />
                      {budget.remaining < 0 && (
                       <p className="text-xs text-destructive mt-1">
                         Overspent by ${Math.abs(budget.remaining).toFixed(2)}
@@ -267,5 +310,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    
