@@ -34,13 +34,48 @@ export default function TransactionsPage() {
     // Load transactions and categories from storage or API in a real app
   }, []);
 
+  useEffect(() => {
+    if (mounted) {
+      try {
+        const storedTransactions = localStorage.getItem('transactions');
+        if (storedTransactions) {
+          const parsedTransactions = JSON.parse(storedTransactions);
+          if (Array.isArray(parsedTransactions)) {
+            setTransactions(parsedTransactions);
+          } else {
+            console.error('Stored transactions are not an array, using initial transactions.');
+            setTransactions(initialTransactions);
+          }
+        } else {
+          setTransactions(initialTransactions);
+        }
+      } catch (error) {
+        console.error('Failed to parse transactions from localStorage, using initial transactions:', error);
+        setTransactions(initialTransactions);
+      }
+    }
+  }, [mounted]);
+
   const addTransaction = (transaction: Omit<Transaction, 'id'>) => {
-    setTransactions(prev => [{ ...transaction, id: Date.now().toString() }, ...prev]);
+    const newTransaction = { ...transaction, id: Date.now().toString() };
+    setTransactions(prev => {
+      const updatedTransactions = [newTransaction, ...prev];
+      if (mounted) {
+        localStorage.setItem('transactions', JSON.stringify(updatedTransactions));
+      }
+      return updatedTransactions;
+    });
     setIsFormOpen(false); // Close dialog after submission
   };
 
   const deleteTransaction = (id: string) => {
-    setTransactions(prev => prev.filter(t => t.id !== id));
+    setTransactions(prev => {
+      const updatedTransactions = prev.filter(t => t.id !== id);
+      if (mounted) {
+        localStorage.setItem('transactions', JSON.stringify(updatedTransactions));
+      }
+      return updatedTransactions;
+    });
   };
   
   if (!mounted) {
