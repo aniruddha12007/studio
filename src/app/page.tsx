@@ -9,9 +9,9 @@ import { DollarSign, TrendingUp, TrendingDown, ListChecks, PlusCircle, Sparkles 
 import Link from 'next/link';
 import { defaultCategories, type Category, type Transaction } from '@/types';
 import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
-import { Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart as RechartsBarChart, Tooltip as RechartsTooltip } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart as RechartsBarChart, Tooltip as RechartsTooltip } from 'recharts';
 import Image from 'next/image';
-import { useAuth } from '@/contexts/auth-context'; // Reverted to alias
+import { useAuth } from '@/contexts/auth-context'; // Reverted to standard alias
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -58,7 +58,7 @@ export default function DashboardPage() {
             setTransactions(initialTransactions); // Fallback
           }
         } else {
-           setTransactions(initialTransactions); 
+           setTransactions(initialTransactions);
         }
 
         const storedCategories = localStorage.getItem(`categories_${user.uid}`);
@@ -67,11 +67,11 @@ export default function DashboardPage() {
            if (Array.isArray(parsedCategories) && parsedCategories.every(cat => cat.id && cat.name && typeof cat.budget === 'number')) {
             setCategories(parsedCategories);
           } else {
-            setCategories(defaultCategories); 
+            setCategories(defaultCategories);
             localStorage.setItem(`categories_${user.uid}`, JSON.stringify(defaultCategories));
           }
         } else {
-          setCategories(defaultCategories); 
+          setCategories(defaultCategories);
           localStorage.setItem(`categories_${user.uid}`, JSON.stringify(defaultCategories));
         }
       } catch (error) {
@@ -310,3 +310,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+
