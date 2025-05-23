@@ -60,9 +60,9 @@ export function CategoryManager({ onSave, onCancel, initialData }: CategoryManag
     reset();
   };
   
+  const { watch } = useForm(); // To watch icon changes
   // Dynamically get icon component for preview
   const SelectedIcon = (LucideIcons as any)[watch('icon') || 'Shapes'] || LucideIcons.Shapes;
-  const { watch } = useForm(); // To watch icon changes
 
   return (
     <form onSubmit={handleSubmit(processSubmit)} className="space-y-4 py-4">
